@@ -37,10 +37,8 @@ window.onload = function() {
 		this.muyu.currentTime=0;
 		this.muyu.play();
 		randomBJ = 1*Math.random();
+		// 等以后有想法了加个彩蛋
 		GD++;
-		if (GD == 10){
-
-		}
 		MY.style.transform = 'scale(0.9)';
 		self.cls = (self.cls + 1) % 300;
 		//创建文字
