@@ -7,25 +7,33 @@
  */
 const {contextBridge} = require('electron');
 const ipcRenderer = require('electron').ipcRenderer;
+const readline = require('readline')
+const path = require('path')
+const fs = require('fs')
+const rl = readline.createInterface({
+    input: fs.createReadStream(path.join(__dirname, 'words.inf')),
+    output: process.stdout,
+    terminal: false
+});
 
-// window.addEventListener('DOMContentLoaded', () => {
-//   const replaceText = (selector, text) => {
-//     const element = document.getElementById(selector)
-//     if (element) element.innerText = text
-//   }
-//
-//   for (const type of ['chrome', 'node', 'electron']) {
-//     replaceText(`${type}-version`, process.versions[type])
-//   }
-// })
 
-contextBridge.exposeInMainWorld(
-    'keyboard', {
-        // From main to render
-        isclick: (click) => {
-            ipcRenderer.on('isclick', click)
-        },
-    });
 
+async function init(){
+  let words = []
+  for await (let line of rl){
+    words.push(line)
+  }
+  contextBridge.exposeInMainWorld(
+      'keyboard', {
+          // From main to render
+          isClick: (callback) => {
+              ipcRenderer.on('isClick', callback)
+            },
+          // getWords: async () => {return await ipcRenderer.invoke('words')}
+          getWords: words
+        });
+}
+
+init();
 
   // Mousetrap.unbind('4', () => { console.log('4') });

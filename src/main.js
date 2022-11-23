@@ -1,54 +1,77 @@
 // Modules to control application life and create native browser window
-const {app, BrowserWindow} = require('electron')
-const {globalShortcut} = require('electron')
-const electronIpcMain = require('electron').ipcMain;
+const {app, BrowserWindow, Menu, ipcMain} = require('electron')
+// const {globalShortcut} = require('electron')
 const path = require('path')
 const ioHook = require('iohook')
+const fs = require('fs')
+const readline = require('readline')
 
+var width;
+var dic = new Array();
+const rl = readline.createInterface({
+    input: fs.createReadStream(path.join(__dirname, 'config.inf')),
+    output: process.stdout,
+    terminal: false
+});
 
-
+function form(value){
+  if (value < 100) return 100;
+  if (value > 500) return 500;
+  return value;
+}
 
 function createWindow () {
   // Create the browser window.
+
+  // console.log(Object.keys(dic));
+  var width = form(parseInt(dic["width"]));
   const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    // 应当允许用户选择
+    width: width,
+    height: width,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
-    }
+    },
+    alwaysOnTop: true,
+    frame: false,
+    transparent: true
   })
-// mainWindow.webContents.openDevTools()
   // and load the index.html of the app.
-  mainWindow.loadFile(path.join(__dirname, 'index.html'))
+  mainWindow.setMenu(null);
+  mainWindow.loadFile(path.join(__dirname, 'index.html'));
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
   return mainWindow
 }
-// app.on('ready', createWindow);
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.whenReady().then(() => {
-  window = createWindow();
+app.whenReady().then(async () => {
+  for await (let line of rl){
+    let words = line.split(':');
+    dic[words[0]] = words[1];
+  }
+  rl.close();
 
-  // var keyboard = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z','SPACE','ENTER','0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
-  // const ret = globalShortcut.registerAll(keyboard, () => {
-  //   console.log('ENTER is pressed');
-  //
-  // })
+  ipcMain.handle('words', async ()=>{
+    return dic['words'];
+  });
+
+  window = createWindow();
+  // window.webContents.send('words', dic['words']);
   ioHook.on('keydown', (event) => {
     console.log("====keyboard===>>>", event);
-    window.webContents.send('isclick', true);
+    window.webContents.send('isClick', true);
   });
   ioHook.start();
 })
 
-  app.on('activate', function () {
-    // On macOS it's common to re-create a window in the app when the
-    // dock icon is clicked and there are no other windows open.
-    if (BrowserWindow.getAllWindows().length === 0) createWindow()
-  })
+app.on('activate', function () {
+  // On macOS it's common to re-create a window in the app when the
+  // dock icon is clicked and there are no other windows open.
+  if (BrowserWindow.getAllWindows().length === 0) createWindow()
+})
 
 
 // Quit when all windows are closed, except on macOS. There, it's common

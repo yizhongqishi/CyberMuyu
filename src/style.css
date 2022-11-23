@@ -5,43 +5,36 @@ html {
 	margin: 0;
 	padding: 0;
 	overflow: hidden;
-	background-color: black;
+	background-color: #ffffff00;
 	font-size: 6px;
 	-webkit-touch-callout: none; /* iOS Safari */
-
 	-webkit-user-select: none; /* Chrome/Safari/Opera */
-
 	-khtml-user-select: none; /* Konqueror */
-
 	-moz-user-select: none; /* Firefox */
-
 	-ms-user-select: none; /* Internet Explorer/Edge */
-
 	user-select: none; /* Non-prefixed version, currently
-
 	not supported by any browser */
   user-select: none;
   -webkit-user-drag: none;
-
-
 }
 
 #MYC {
 	width: 100%;
 	height: 100%;
 	margin: 0;
-	font-size: 24px;
+	font-size: 5em;
 	overflow: hidden;
 	white-space: nowrap;
 }
 
 
-
-@media only screen and (min-width: 320px) and (max-width: 352px) { #MYC { font-size: 30px; } }
-@media only screen and (min-width: 352px) and (max-width: 640px) { #MYC { font-size: 40px; } }
-@media only screen and (min-width: 640px) and (max-width: 750px) { #MYC { font-size: 50px; } }
-@media only screen and (min-width: 750px) and (max-width: 1280px){ #MYC { font-size: 60px; } }
-@media only screen and (min-width: 1280px) { #MYC { font-size: 70px; } }
+/* @media only screen and (min-width: 100px) and (max-width: 200px) { #MYC { font-size: 20px; } }
+@media only screen and (min-width: 200px) and (max-width: 320px) { #MYC { font-size: 25px; } }
+@media only screen and (min-width: 320px) and (max-width: 352px) { #MYC { font-size: 35px; } }
+@media only screen and (min-width: 352px) and (max-width: 640px) { #MYC { font-size: 45px; } }
+@media only screen and (min-width: 640px) and (max-width: 750px) { #MYC { font-size: 55px; } }
+@media only screen and (min-width: 750px) and (max-width: 1280px){ #MYC { font-size: 65px; } }
+@media only screen and (min-width: 1280px) { #MYC { font-size: 70px; } } */
 
 #MY {
 	margin: 0 auto;
@@ -51,13 +44,13 @@ html {
 	width: 100%;
 	height: 100%;
 	background-position: center;
-	background-size: 60%;
+	background-size: 100%;
 	background-image: url(../img/muyu.png);
 	overflow: hidden;
 
 }
 
-.icon2 img{
+/* .icon2 img{
 	height: 100%;
 	transition: 1s;
 	margin: auto 0 ;
@@ -83,11 +76,11 @@ html {
 #icon img:hover{
 	transition: 0.1s;
 	transform: scale(0.9);
-}
-#SETI{
+} */
+/* #SETI{
 	width: 100%;
 	height: 100%;
-}
+} */
 
 
 p{
