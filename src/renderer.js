@@ -7,6 +7,29 @@ function getRandomColor(){
 	}
 	return '#' + rgb.join('')
 }
+window.addEventListener('contextmenu', (e) => {
+  console.log("context~");
+});
+
+var animationId, mouseX, mouseY;
+function moveWindow() {
+  window.mouse.moving('windowMoving', {mouseX, mouseY});
+  animationId = requestAnimationFrame(this.moveWindow);
+}
+window.addEventListener('mousedown', (e) => {
+	mouseX = e.clientX;
+	mouseY = e.clientY;
+	window.addEventListener('mouseup', onMouseUp);
+  animationId = requestAnimationFrame(this.moveWindow);
+	// console.log("down");
+})
+
+
+function onMouseUp(e) {
+  window.removeEventListener('mouseup', onMouseUp)
+  cancelAnimationFrame(animationId)
+}
+
 
 window.onload = function() {
 	//定义点击出现文字类
@@ -32,33 +55,19 @@ window.onload = function() {
 	ClickFrontShow.prototype.init = function() {
 		// this.fron = frontArray || this.fron;
 		// this.colo = colorArray || this.colo;
-		var self = this;
-		// this.listenMouse();
+		this.listenMouse();
+		// this.listenContext();
 		window.keyboard.isClick((event, click) => {
 			let width = this.elBody.clientWidth||this.elBody.offsetWidth;
 			let height = this.elBody.clientHeight||this.elBody.offsetHeight;
 			this.click(width * 0.6, height * 0.2);
 		});
 
-
-		// window.keyboard.getWords().then((words) => {
-		// 	self.fron = [words];
-		// });
-
-		self.fron = window.keyboard.getWords;
-		// console.log(self.fron);
-
-		// console.log(
-		// window.keyboard.getWords((event, words) => {
-		// 	console.log("get");
-		// })
-	// );
-		// console.log(window.keyboard.getWords);
+		this.fron = window.keyboard.getWords;
 
 	}
 
 	ClickFrontShow.prototype.click = function (x, y){
-		var self = this;
 		this.muyu.currentTime=0;
 		this.muyu.play();
 		// 等以后有想法了加个彩蛋
@@ -68,13 +77,12 @@ window.onload = function() {
 		this.cls = (this.cls + 1) % 300;
 		//创建文字
 		this.createFront(this.cls);
-		console.log(this.elBody.style.fontSize);
 		let el = document.getElementsByClassName(this.cls)[0];
 		el.style.left = x + 'px';
 		el.style.top =  y + 'px';
 
 		//过时改变
-		setTimeout(function() {
+		setTimeout(() => {
 			el.style.opacity = 0;
 			el.style.top = el.offsetTop - 100 + 'px';
 			// 图片恢复
@@ -82,8 +90,8 @@ window.onload = function() {
 		}, 100);
 
 		//过时清除
-		setTimeout(function() {
-			self.elBody.removeChild(el);
+		setTimeout(() => {
+			this.elBody.removeChild(el);
 		}, 1000);
 	}
 
@@ -108,11 +116,27 @@ window.onload = function() {
 
 	ClickFrontShow.prototype.listenMouse = function() {
 		//鼠标点击事件
-		var MYclick = document.getElementById("MYC")
-		MYclick.onclick = function(e) {
-			this.click(e.clientX, e.clientY);
+		var myClick = document.getElementById("MY");
+		var ndiv = null;
+		myClick.oncontextmenu = () =>{
+			console.log("context!");
+		}
+		myClick.onmouseover = () => {
+			console.log("over!");
+		}
+		myClick.onmouseout = () =>{
+			console.log("out!");
 		}
 	}
+
+// 鼠标右键
+	// ClickFrontShow.prototype.listenContext = () =>{
+	// 	let contextClick = document.getElementById("MYC");
+	// 	contextClick.oncontextmenu = () => {
+	// 		console.log("context");
+	// 	}
+	// }
+
 
 
 	var GD = 0;

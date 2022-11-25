@@ -5,18 +5,17 @@
  *
  * https://www.electronjs.org/docs/latest/tutorial/sandbox
  */
-const {contextBridge} = require('electron');
+const {contextBridge, app, Menu } = require('electron');
 const ipcRenderer = require('electron').ipcRenderer;
 const readline = require('readline')
 const path = require('path')
 const fs = require('fs')
+
 const rl = readline.createInterface({
     input: fs.createReadStream(path.join(__dirname, 'words.inf')),
     output: process.stdout,
     terminal: false
 });
-
-
 
 async function init(){
   let words = []
@@ -31,9 +30,22 @@ async function init(){
             },
           // getWords: async () => {return await ipcRenderer.invoke('words')}
           getWords: words
-        });
+    });
+    contextBridge.exposeInMainWorld(
+        'mouse', {
+            // From main to render
+            moving: (e, {mouseX, mouseY}) => {
+                ipcRenderer.send('windowMoving', {mouseX, mouseY})
+              },
+            // getWords: async () => {return await ipcRenderer.invoke('words')}
+            context: () =>{
+              ipcRenderer.send('context', )
+            }
+      });
+    // contextBridge.exposeInMainWorld(
+    //     'contextmenu', {
+    //         click: () => ipcRenderer.send('show-context-menu')
+    //       });
 }
 
 init();
-
-  // Mousetrap.unbind('4', () => { console.log('4') });

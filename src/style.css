@@ -14,8 +14,7 @@ html {
 	-ms-user-select: none; /* Internet Explorer/Edge */
 	user-select: none; /* Non-prefixed version, currently
 	not supported by any browser */
-  user-select: none;
-  -webkit-user-drag: none;
+  /* -webkit-user-drag: none; */
 }
 
 #MYC {
@@ -25,6 +24,7 @@ html {
 	font-size: 5em;
 	overflow: hidden;
 	white-space: nowrap;
+	/* -webkit-app-region: drag */
 }
 
 

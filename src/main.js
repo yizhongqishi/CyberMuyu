@@ -1,10 +1,17 @@
 // Modules to control application life and create native browser window
-const {app, BrowserWindow, Menu, ipcMain} = require('electron')
+const {app, BrowserWindow, Menu, MenuItem, ipcMain, screen} = require('electron')
 // const {globalShortcut} = require('electron')
 const path = require('path')
 const ioHook = require('iohook')
 const fs = require('fs')
 const readline = require('readline')
+
+
+var menu = Menu();
+menu.append(new MenuItem({ label: 'MenuItem1', click: function() { console.log("YES");} }));
+menu.append(new MenuItem({ type: 'separator' }));
+menu.append(new MenuItem({ label: 'MenuItem2', type: 'checkbox', checked: true }));
+
 
 var width;
 var dic = new Array();
@@ -14,6 +21,7 @@ const rl = readline.createInterface({
     terminal: false
 });
 
+
 function form(value){
   if (value < 100) return 100;
   if (value > 500) return 500;
@@ -22,31 +30,28 @@ function form(value){
 
 function createWindow () {
   // Create the browser window.
-
-  // console.log(Object.keys(dic));
   var width = form(parseInt(dic["width"]));
   const mainWindow = new BrowserWindow({
     // 应当允许用户选择
     width: width,
+    // resizable: false,
     height: width,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
     },
     alwaysOnTop: true,
     frame: false,
-    transparent: true
+    transparent: true,
   })
   // and load the index.html of the app.
-  mainWindow.setMenu(null);
   mainWindow.loadFile(path.join(__dirname, 'index.html'));
-
+  mainWindow.setResizable(false)
+  mainWindow.setMaximizable(false)
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
+
   return mainWindow
 }
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
 app.whenReady().then(async () => {
   for await (let line of rl){
     let words = line.split(':');
@@ -59,13 +64,30 @@ app.whenReady().then(async () => {
   });
 
   window = createWindow();
-  // window.webContents.send('words', dic['words']);
   ioHook.on('keydown', (event) => {
     console.log("====keyboard===>>>", event);
     window.webContents.send('isClick', true);
   });
   ioHook.start();
-})
+  // 阻止标题栏菜单
+  window.hookWindowMessage(278, function (e) {
+        window.setEnabled(false);
+        setTimeout(() => {
+            window.setEnabled(true);
+        }, 100)
+        return true;
+    })
+  ipcMain.on('windowMoving', (e, {mouseX, mouseY}) => {
+    const { x, y } = screen.getCursorScreenPoint()
+    window.setPosition(x - mouseX, y - mouseY)
+  });
+
+  ipcMain.on('windowMoved', () => {
+    // Do somehting when dragging stop
+    console.log("moved");
+  });
+
+});
 
 app.on('activate', function () {
   // On macOS it's common to re-create a window in the app when the
