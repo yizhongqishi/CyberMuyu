@@ -9,8 +9,8 @@ function getRandomColor(){
 }
 window.addEventListener('contextmenu', (e) => {
   console.log("context~");
+	window.mouse.context();
 });
-
 var animationId, mouseX, mouseY;
 function moveWindow() {
   window.mouse.moving('windowMoving', {mouseX, mouseY});
@@ -21,10 +21,7 @@ window.addEventListener('mousedown', (e) => {
 	mouseY = e.clientY;
 	window.addEventListener('mouseup', onMouseUp);
   animationId = requestAnimationFrame(this.moveWindow);
-	// console.log("down");
 })
-
-
 function onMouseUp(e) {
   window.removeEventListener('mouseup', onMouseUp)
   cancelAnimationFrame(animationId)
@@ -33,6 +30,7 @@ function onMouseUp(e) {
 
 window.onload = function() {
 	//定义点击出现文字类
+
 	function ClickFrontShow() {
 		//定义所需文字和颜色
 		this.fron = ['功德 +1'];
@@ -45,7 +43,7 @@ window.onload = function() {
 		this.index = 0;
 		//初始化className
 		this.cls = 0;
-		this.muyu = new Audio("../sound/muyu.mp3");
+		this.muyu = new Audio("../../sound/muyu.mp3");
 		this.buddha = new Audio("");
 		let width = this.elBody.clientWidth||this.elBody.offsetWidth;
 		this.elBody.style.fontSize = 0.1 * width + 'px';
@@ -53,17 +51,15 @@ window.onload = function() {
 
 	//定义初始化
 	ClickFrontShow.prototype.init = function() {
-		// this.fron = frontArray || this.fron;
-		// this.colo = colorArray || this.colo;
-		this.listenMouse();
-		// this.listenContext();
+
 		window.keyboard.isClick((event, click) => {
 			let width = this.elBody.clientWidth||this.elBody.offsetWidth;
 			let height = this.elBody.clientHeight||this.elBody.offsetHeight;
 			this.click(width * 0.6, height * 0.2);
 		});
 
-		this.fron = window.keyboard.getWords;
+
+		this.fron = window.keyboard.getWords();
 
 	}
 
@@ -114,38 +110,25 @@ window.onload = function() {
 		ospan.innerHTML = randomFront;
 	}
 
-	ClickFrontShow.prototype.listenMouse = function() {
-		//鼠标点击事件
-		var myClick = document.getElementById("MY");
-		var ndiv = null;
-		myClick.oncontextmenu = () =>{
-			console.log("context!");
-		}
-		myClick.onmouseover = () => {
-			console.log("over!");
-		}
-		myClick.onmouseout = () =>{
-			console.log("out!");
-		}
-	}
-
-// 鼠标右键
-	// ClickFrontShow.prototype.listenContext = () =>{
-	// 	let contextClick = document.getElementById("MYC");
-	// 	contextClick.oncontextmenu = () => {
-	// 		console.log("context");
+	// ClickFrontShow.prototype.listenMouse = function() {
+	// 	//鼠标点击事件
+	// 	var myClick = document.getElementById("MY");
+	// 	var ndiv = null;
+	// 	myClick.oncontextmenu = () =>{
+	// 		console.log("context!");
+	// 	}
+	// 	myClick.onmouseover = () => {
+	// 		console.log("over!");
+	// 	}
+	// 	myClick.onmouseout = () =>{
+	// 		console.log("out!");
 	// 	}
 	// }
-
 
 
 	var GD = 0;
 	var frontShow = new ClickFrontShow();
 	frontShow.init();
 
-	// function doSomething(){
-	// 	console.log("press");
-	// }
-	// window.addEventListener('keyup', doSomething, true);
 
 }

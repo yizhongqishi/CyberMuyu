@@ -1,7 +1,7 @@
 {
   "name": "CyberMuyu",
   "productName": "CyberMuyu",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Cyber Muyu and Electronic Buddha",
   "main": "src/main.js",
   "scripts": {
